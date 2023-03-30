@@ -1,4 +1,5 @@
 import * as React from "react";
+import SessionStorageManager from "../../helpers/SessionStorageManager";
 import style from "./index.module.scss";
 
 type IKey = {
@@ -144,7 +145,10 @@ const KeyboardHistoryLinear = ({ history }: PropsHistoryLinear) => {
                 {history.map((item, index) => {
                     return (
                         <li key={index}>
-                            <span>{item.label}</span>--
+                            <span>
+                                <b>{item.label}</b>
+                            </span>
+                            --
                             <span>{item.timestamp}</span>
                         </li>
                     );
@@ -178,7 +182,12 @@ const CustomKeyboard = ({ keyboardData }: PropsKeyboard) => {
         const matrixOX = ox + 1;
         const matrixOY = oy + 1;
 
-        setHistoryMatrix([...historyMatrix, [matrixOY, matrixOX]]);
+        const sessionStorageManager = new SessionStorageManager();
+        sessionStorageManager.setItem("historyMatrix", [
+            [matrixOY, matrixOX],
+            ...historyMatrix,
+        ]);
+        setHistoryMatrix([[matrixOY, matrixOX], ...historyMatrix]);
     };
 
     const historyLinearHandler = (label: PropsKey["mainSign"]): void => {
@@ -187,8 +196,39 @@ const CustomKeyboard = ({ keyboardData }: PropsKeyboard) => {
             timestamp: new Date().getTime(),
         };
 
-        setHistoryLinear([...historyLinear, currentHistoryItem]);
+        const sessionStorageManager = new SessionStorageManager();
+        sessionStorageManager.setItem("historyLinear", [
+            currentHistoryItem,
+            ...historyLinear,
+        ]);
+
+        setHistoryLinear([currentHistoryItem, ...historyLinear]);
     };
+
+    React.useEffect(() => {
+        const sessionStorageManager = new SessionStorageManager();
+        const sessionHistoryLinear =
+            sessionStorageManager.getItem<IHistoryItemLinear[]>(
+                "historyLinear",
+            );
+        const sessionHistoryMatrix =
+            sessionStorageManager.getItem<IHistoryItemMatrix[]>(
+                "historyMatrix",
+            );
+
+        setHistoryLinear(sessionHistoryLinear || []);
+        setHistoryMatrix(sessionHistoryMatrix || []);
+    }, []);
+
+    React.useEffect(() => {
+        const sessionStorageManager = new SessionStorageManager();
+        sessionStorageManager.setItem("historyLinear", historyLinear);
+    }, [historyLinear]);
+
+    React.useEffect(() => {
+        const sessionStorageManager = new SessionStorageManager();
+        sessionStorageManager.setItem("historyMatrix", historyMatrix);
+    }, [historyMatrix]);
 
     return (
         <div className={style.customKeyboard}>
