@@ -1,5 +1,5 @@
 class SessionStorageManager {
-    getItem<T>(keyName: string): T | undefined {
+    public getItem<T>(keyName: string): T | undefined {
         const item = window.sessionStorage.getItem(keyName);
 
         if (item) {
@@ -9,7 +9,7 @@ class SessionStorageManager {
         return undefined;
     }
 
-    setItem<T>(keyName: string, data: T): void {
+    public setItem<T>(keyName: string, data: T): void {
         window.sessionStorage.setItem(keyName, JSON.stringify(data));
     }
 }
