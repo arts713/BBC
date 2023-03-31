@@ -1,12 +1,12 @@
 import { IHistoryItemLinear } from "../ui/HistoryLinear/types";
 import { IHistoryItemMatrix } from "../ui/HistoryMatrix/types";
 
-export type IHistoryLinearState = IHistoryItemLinear[];
-export type IHistoryItemMatrixState = IHistoryItemMatrix[];
+export type IHistoryStateLinear = IHistoryItemLinear[];
+export type IHistoryStateMatrix = IHistoryItemMatrix[];
 
 export type IState = {
-    historyLinear: IHistoryLinearState;
-    historyMatrix: IHistoryItemMatrixState;
+    historyLinear: IHistoryStateLinear;
+    historyMatrix: IHistoryStateMatrix;
 };
 const initialState: IState = {
     historyLinear: [],

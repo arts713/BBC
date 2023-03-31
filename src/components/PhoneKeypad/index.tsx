@@ -7,8 +7,8 @@ import HistoryMatrix from "./ui/HistoryMatrix";
 import Keyboard from "./ui/Keyboard";
 import phoneKepadReducer from "./store/reducer";
 import phoneKeypadInitialState, {
-    IHistoryItemMatrixState,
-    IHistoryLinearState,
+    IHistoryStateMatrix,
+    IHistoryStateLinear,
 } from "./store/initialState";
 
 const sessionStorageManager = new SessionStorageManager();
@@ -47,23 +47,19 @@ const PhoneKeypad = ({ keyboardData }: PropsKeyboard) => {
 
     React.useEffect(() => {
         const historyLinear =
-            sessionStorageManager.getItem<IHistoryLinearState>("historyLinear");
+            sessionStorageManager.getItem<IHistoryStateLinear>("historyLinear");
         const historyMatrix =
-            sessionStorageManager.getItem<IHistoryItemMatrixState>(
-                "historyMatrix",
-            );
+            sessionStorageManager.getItem<IHistoryStateMatrix>("historyMatrix");
 
-        sessionStorageManager.setItem("historyLinear", historyLinear);
-        sessionStorageManager.setItem("historyMatrix", historyMatrix);
+        // Update
+        dispatch({
+            type: "UPDATE_HISTORIES",
+            payload: {
+                historyLinear: historyLinear || [],
+                historyMatrix: historyMatrix || [],
+            },
+        });
     }, []);
-
-    React.useEffect(() => {
-        sessionStorageManager.setItem("historyLinear", state.historyLinear);
-    }, [state.historyLinear]);
-
-    React.useEffect(() => {
-        sessionStorageManager.setItem("historyMatrix", state.historyMatrix);
-    }, [state.historyMatrix]);
 
     return (
         <div className={style.phoneKeypad}>

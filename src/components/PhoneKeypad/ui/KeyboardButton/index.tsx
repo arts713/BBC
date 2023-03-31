@@ -8,7 +8,6 @@ const KeyboardButton = ({
     ox,
     oy,
 }: PropsKey) => {
-    console.log(`Render button: ${mainSign}`);
     return (
         <button
             className={style.keyButton}
