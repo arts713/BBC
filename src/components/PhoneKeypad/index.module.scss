@@ -3,39 +3,56 @@ $historyHeight: 230px;
 .phoneKeypad {
     &__content {
         display: flex;
-        justify-content: stretch;
 
-        @media screen and (max-width: 390px) {
+        @media screen and (max-width: 767px) {
             flex-flow: row wrap;
             justify-content: center;
+        }
+    }
+
+    &__keyboardWrapper {
+        @media screen and (max-width: 767px) {
+            order: 2;
+            margin-top: 1rem;
         }
     }
 
     &__historyWrapper {
         display: flex;
         flex-flow: row wrap;
+        justify-content: space-between;
+        width: 100%;
         max-height: $historyHeight;
         margin-left: 1rem;
 
-        @media screen and (max-width: 390px) {
+        @media screen and (max-width: 767px) {
+            justify-content: space-around;
+            order: 1;
             margin-left: 0;
-            margin-top: 1.5rem;
         }
     }
 
     &__history {
-        flex: 1 0 50%;
         min-width: 150px;
         max-width: 200px;
+        margin: 0 5px;
+        border: 1px solid var(--color-main-dark);
+        border-radius: 5px;
+        background: var(--color-main);
+        color: var(--color-white);
         text-align: center;
-        border: 1px solid black;
+        font-size: 1rem;
+
+        @media screen and (max-width: 767px) {
+            width: 45%;
+            font-size: 1.25rem;
+        }
 
         &__header {
             height: 30px;
             line-height: 30px;
             margin: 0;
-            border-bottom: 1px solid #000;
-            font-size: 1rem;
+            border-bottom: 1px solid var(--color-main-dark);
             font-weight: 600;
         }
 
@@ -46,8 +63,16 @@ $historyHeight: 230px;
             overflow-y: scroll;
             list-style-type: none;
 
-            @media screen and (max-width: 390px) {
+            @media screen and (max-width: 767px) {
                 height: $historyHeight - 30;
+            }
+
+            li {
+                margin: 5px 0;
+
+                &:nth-child(2n) {
+                    background: rgba(#fff, 0.25);
+                }
             }
         }
     }
@@ -67,35 +92,8 @@ $historyHeight: 230px;
     &__button {
         margin: 1px;
 
-        @media screen and (max-width: 390px) {
+        @media screen and (max-width: 767px) {
             margin: 5px;
         }
-    }
-}
-
-.keyButton {
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 1.25rem;
-    cursor: pointer;
-
-    &__container {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 3rem;
-    }
-
-    &__mainSign {
-        font-size: 1.75rem;
-        font-weight: 700;
-    }
-
-    &__additionalSign {
-        position: absolute;
-        top: -4px;
-        font-size: 0.875rem;
-        font-weight: 500;
     }
 }

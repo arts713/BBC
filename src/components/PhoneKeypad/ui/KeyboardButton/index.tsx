@@ -1,5 +1,5 @@
 import { PropsKey } from "./types";
-import style from "../../index.module.scss";
+import style from "./index.module.scss";
 
 const KeyboardButton = ({
     mainSign,

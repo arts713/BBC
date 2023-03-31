@@ -1,0 +1,39 @@
+.keyButton {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 1.25rem;
+    background: var(--color-main);
+    color: var(--color-white);
+    border: 1px solid var(--color-main-dark);
+    cursor: pointer;
+    transition: background 0.175s linear;
+
+    &:focus {
+        outline: none;
+    }
+
+    &:focus,
+    &:focus {
+        background: var(--color-main-dark);
+    }
+
+    &__container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 3rem;
+    }
+
+    &__mainSign {
+        font-size: 1.75rem;
+        font-weight: 700;
+    }
+
+    &__additionalSign {
+        position: absolute;
+        top: -4px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+}
