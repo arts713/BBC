@@ -1,5 +1,5 @@
 import * as React from "react";
-import CustomKeyboard from "../../components/CustomKeyboard";
+import PhoneKeypad from "../../components/PhoneKeypad";
 import style from "./index.module.scss";
 
 const keyboardMock = [
@@ -27,7 +27,7 @@ function App() {
             <div
                 className={`${style.app__container} ${style.app__container_center}`}
             >
-                <CustomKeyboard keyboardData={keyboardMock} />
+                <PhoneKeypad keyboardData={keyboardMock} />
             </div>
         </div>
     );

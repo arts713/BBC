@@ -1,6 +1,6 @@
 $historyHeight: 230px;
 
-.customKeyboard {
+.phoneKeypad {
     &__content {
         display: flex;
         justify-content: stretch;
@@ -40,8 +40,7 @@ $historyHeight: 230px;
         }
 
         &__list {
-            min-height: 30px;
-            max-height: $historyHeight - 30;
+            height: $historyHeight - 30;
             padding: 0;
             margin: 0;
             overflow-y: scroll;
