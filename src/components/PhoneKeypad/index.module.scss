@@ -62,6 +62,17 @@ $historyHeight: 230px;
             margin: 0;
             overflow-y: scroll;
             list-style-type: none;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-main-dark) var(--color-main);
+
+            &::-webkit-scrollbar {
+                width: 12px;
+                background-color: var(--color-main);
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: var(--color-main-dark);
+            }
 
             @media screen and (max-width: 767px) {
                 height: $historyHeight - 30;
