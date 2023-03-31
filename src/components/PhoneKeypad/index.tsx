@@ -1,98 +1,82 @@
 import * as React from "react";
 import SessionStorageManager from "../../helpers/SessionStorageManager";
 import style from "./index.module.scss";
-import { PropsKeyboard } from "./types";
+import { IHistoryHandler, PropsKeyboard } from "./types";
 import HistoryLinear from "./ui/HistoryLinear";
-import { IHistoryItemLinear } from "./ui/HistoryLinear/types";
 import HistoryMatrix from "./ui/HistoryMatrix";
-import { IHistoryItemMatrix } from "./ui/HistoryMatrix/types";
 import Keyboard from "./ui/Keyboard";
-import { PropsKey } from "./ui/KeyboardButton/types";
+import phoneKepadReducer from "./store/reducer";
+import phoneKeypadInitialState, {
+    IHistoryItemMatrixState,
+    IHistoryLinearState,
+} from "./store/initialState";
+
+const sessionStorageManager = new SessionStorageManager();
+
+const MemoKeyboard = React.memo(
+    ({
+        keyboardData,
+        keyHandler,
+    }: {
+        keyboardData: PropsKeyboard["keyboardData"];
+        keyHandler: IHistoryHandler;
+    }) => {
+        return <Keyboard keyHandler={keyHandler} keyboardData={keyboardData} />;
+    },
+);
 
 const PhoneKeypad = ({ keyboardData }: PropsKeyboard) => {
-    const [historyLinear, setHistoryLinear] = React.useState<
-        IHistoryItemLinear[] | []
-    >([]);
-    const [historyMatrix, setHistoryMatrix] = React.useState<
-        IHistoryItemMatrix[] | []
-    >([]);
+    const [state, dispatch] = React.useReducer(
+        phoneKepadReducer,
+        phoneKeypadInitialState,
+    );
 
-    const historyHandler = (
-        label: PropsKey["mainSign"],
-        ox: PropsKey["ox"],
-        oy: PropsKey["oy"],
-    ): void => {
-        historyLinearHandler(label);
-        historyMatrixHandler(ox, oy);
-    };
-
-    const historyMatrixHandler = (
-        ox: PropsKey["ox"],
-        oy: PropsKey["oy"],
-    ): void => {
-        const matrixOX = ox + 1;
-        const matrixOY = oy + 1;
-
-        const sessionStorageManager = new SessionStorageManager();
-        sessionStorageManager.setItem("historyMatrix", [
-            [matrixOY, matrixOX],
-            ...historyMatrix,
-        ]);
-        setHistoryMatrix([[matrixOY, matrixOX], ...historyMatrix]);
-    };
-
-    const historyLinearHandler = (label: PropsKey["mainSign"]): void => {
-        const currentHistoryItem: IHistoryItemLinear = {
-            label,
-            timestamp: new Date().getTime(),
-        };
-
-        const sessionStorageManager = new SessionStorageManager();
-        sessionStorageManager.setItem("historyLinear", [
-            currentHistoryItem,
-            ...historyLinear,
-        ]);
-
-        setHistoryLinear([currentHistoryItem, ...historyLinear]);
-    };
+    const historyHandler: IHistoryHandler = React.useCallback(
+        (label, ox, oy) => {
+            dispatch({
+                type: "ADD_HISTORY_LINEAR",
+                payload: { label },
+            });
+            dispatch({
+                type: "ADD_HISTORY_MATRIX",
+                payload: { ox, oy },
+            });
+        },
+        [],
+    );
 
     React.useEffect(() => {
-        const sessionStorageManager = new SessionStorageManager();
-        const sessionHistoryLinear =
-            sessionStorageManager.getItem<IHistoryItemLinear[]>(
-                "historyLinear",
-            );
-        const sessionHistoryMatrix =
-            sessionStorageManager.getItem<IHistoryItemMatrix[]>(
+        const historyLinear =
+            sessionStorageManager.getItem<IHistoryLinearState>("historyLinear");
+        const historyMatrix =
+            sessionStorageManager.getItem<IHistoryItemMatrixState>(
                 "historyMatrix",
             );
 
-        setHistoryLinear(sessionHistoryLinear || []);
-        setHistoryMatrix(sessionHistoryMatrix || []);
+        sessionStorageManager.setItem("historyLinear", historyLinear);
+        sessionStorageManager.setItem("historyMatrix", historyMatrix);
     }, []);
 
     React.useEffect(() => {
-        const sessionStorageManager = new SessionStorageManager();
-        sessionStorageManager.setItem("historyLinear", historyLinear);
-    }, [historyLinear]);
+        sessionStorageManager.setItem("historyLinear", state.historyLinear);
+    }, [state.historyLinear]);
 
     React.useEffect(() => {
-        const sessionStorageManager = new SessionStorageManager();
-        sessionStorageManager.setItem("historyMatrix", historyMatrix);
-    }, [historyMatrix]);
+        sessionStorageManager.setItem("historyMatrix", state.historyMatrix);
+    }, [state.historyMatrix]);
 
     return (
         <div className={style.phoneKeypad}>
             <div className={style.phoneKeypad__content}>
                 <div className={style.phoneKeypad__keyboardWrapper}>
-                    <Keyboard
+                    <MemoKeyboard
                         keyHandler={historyHandler}
                         keyboardData={keyboardData}
                     />
                 </div>
                 <div className={style.phoneKeypad__historyWrapper}>
-                    <HistoryLinear history={historyLinear} />
-                    <HistoryMatrix history={historyMatrix} />
+                    <HistoryLinear history={state.historyLinear} />
+                    <HistoryMatrix history={state.historyMatrix} />
                 </div>
             </div>
         </div>

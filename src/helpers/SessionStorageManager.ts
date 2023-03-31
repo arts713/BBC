@@ -6,10 +6,10 @@ class SessionStorageManager {
             return JSON.parse(item) as T;
         }
 
-        return;
+        return undefined;
     }
 
-    setItem(keyName: string, data: any): void {
+    setItem<T>(keyName: string, data: T): void {
         window.sessionStorage.setItem(keyName, JSON.stringify(data));
     }
 }
